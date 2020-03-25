@@ -15,5 +15,7 @@ export default {
 </script>
 
 <style>
-@import 'assets/css/global.css'
+/* 引入自定义配置css */
+@import 'assets/css/global.css';
+
 </style>

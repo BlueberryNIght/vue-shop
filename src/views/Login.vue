@@ -1,36 +1,41 @@
 <template>
   <div class="login-container">
+    <!-- 头像框 -->
     <div class="login-box">
       <div class="avater-box">
-        <img src="~assets/logo.png" alt="">
+        <img src="~assets/logo.png" alt />
       </div>
+      <!-- 表单区域 -->
+      <el-form ref="form" class="login-form">
+        <el-form-item >
+          <el-input  prefix-icon="iconfon icon-yonghu"></el-input>
+        </el-form-item>
+        <el-form-item >
+          <el-input  prefix-icon="iconfon icon-icon2"></el-input>
+        </el-form-item>
+        <el-form-item class="btns">
+          <el-button type="primary">登录</el-button>
+          <el-button type="info">重置</el-button>
+        </el-form-item>
+      </el-form>
+
     </div>
-    <el-form ref="form"  label-width="80px">
-      <el-form-item label="活动名称">
-        <el-input ></el-input>
-      </el-form-item>
-      <el-form-item label="活动名称">
-        <el-input ></el-input>
-      </el-form-item>
-    </el-form>
   </div>
 </template>
 
 <script>
-export default {
-
-}
+export default {};
 </script>
 
 <style scoped>
-.login-container{
-    background-color: #2b4b6b;
-    height: 100%;
-    overflow: hidden;
+.login-container {
+  background-color: #2b4b6b;
+  height: 100%;
+  overflow: hidden;
 }
-.login-box{
+.login-box {
   width: 450px;
-  height:300px;
+  height: 300px;
   background: #fff;
   border-radius: 3px;
   position: absolute;
@@ -38,7 +43,7 @@ export default {
   top: 50%;
   transform: translate(-50%, -50%);
 }
-.avater-box{
+.avater-box {
   width: 130px;
   height: 130px;
   border: 1px solid #eee;
@@ -50,11 +55,21 @@ export default {
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
 }
-.avater-box img{
+.avater-box img {
   width: 100%;
   height: 100%;
-  border-radius:50%;
+  border-radius: 50%;
   background: #eee;
 }
-
+.login-form{
+  width: 100%;
+  padding:0 20px;
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 0;
+}
+.btns{
+  display: flex;
+  justify-content: flex-end;
+}
 </style>
