@@ -6,25 +6,61 @@
         <img src="~assets/logo.png" alt />
       </div>
       <!-- 表单区域 -->
-      <el-form ref="form" class="login-form">
-        <el-form-item >
-          <el-input  prefix-icon="iconfon icon-yonghu"></el-input>
+      <el-form ref="form" :model="loginForm" :rules="rules" class="login-form">
+        <el-form-item prop="username">
+          <el-input prefix-icon="el-icon-user-solid" v-model="loginForm.username"></el-input>
         </el-form-item>
-        <el-form-item >
-          <el-input  prefix-icon="iconfon icon-icon2"></el-input>
+        <el-form-item prop="password">
+          <el-input prefix-icon="el-icon-edit" v-model="loginForm.password" type="password"></el-input>
         </el-form-item>
         <el-form-item class="btns">
-          <el-button type="primary">登录</el-button>
-          <el-button type="info">重置</el-button>
+          <el-button type="primary" @click="login">登录</el-button>
+          <el-button type="info" @click="restForm">重置</el-button>
         </el-form-item>
       </el-form>
-
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      // 登录表单数据对象
+      loginForm: {
+        username: "",
+        password: ""
+      },
+      // 表单验证规则
+      rules: {
+        username: [
+          { required: true, message: "请输入登录名称", trigger: "blur" },
+          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" }
+        ],
+        password: [
+          { required: true, message: "请输入登录密码", trigger: "blur" }
+        ]
+      }
+    };
+  },
+  methods: {
+    // 表单重置:调用表单对象的resetFields()方法
+    restForm() {
+      this.$refs.form.resetFields();
+    },
+    // 表单验证validate(valid => {})  valid回调函数  通过返回true,不通过返回false
+    login() {
+      this.$refs.form.validate(valid => {
+        if(valid) {
+          this.$message.success("登录成功！！！");
+          this.$router.push('/home')
+        }else{
+          this.$message.error("登录失败请重新输入！")
+        }
+      });
+    }
+  }
+};
 </script>
 
 <style scoped>
@@ -61,14 +97,14 @@ export default {};
   border-radius: 50%;
   background: #eee;
 }
-.login-form{
+.login-form {
   width: 100%;
-  padding:0 20px;
+  padding: 0 20px;
   box-sizing: border-box;
   position: absolute;
   bottom: 0;
 }
-.btns{
+.btns {
   display: flex;
   justify-content: flex-end;
 }
