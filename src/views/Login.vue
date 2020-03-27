@@ -28,8 +28,8 @@ export default {
     return {
       // 登录表单数据对象
       loginForm: {
-        username: "",
-        password: ""
+        username: "admin",
+        password: "123456"
       },
       // 表单验证规则
       rules: {
@@ -50,13 +50,19 @@ export default {
     },
     // 表单验证validate(valid => {})  valid回调函数  通过返回true,不通过返回false
     login() {
-      this.$refs.form.validate(valid => {
-        if(valid) {
-          this.$message.success("登录成功！！！");
-          this.$router.push('/home')
-        }else{
-          this.$message.error("登录失败请重新输入！")
-        }
+      this.$refs.form.validate(async valid => {
+        if (!valid) return;
+        // axios请求(url, 参数)
+        const { data: res } = await this.$http.post("login", this.loginForm);
+        //根据status状态判断是否登录成功
+        if (res.meta.status !== 200)
+          return this.$message.error("登录失败请重新输入！");
+        this.$message.success("登录成功！！！");
+        //获取token
+        // console.log(res.data.token);
+        // 将token保存到sessionStorage中
+        window.sessionStorage.setItem('token', res.data.token);
+        this.$router.push('/home')
       });
     }
   }
