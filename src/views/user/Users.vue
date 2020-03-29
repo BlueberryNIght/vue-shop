@@ -1,69 +1,71 @@
 <template>
   <div>
-    <!-- 面包屑导航 -->
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-      <el-breadcrumb-item>用户列表</el-breadcrumb-item>
-    </el-breadcrumb>
-    <!-- 卡片视图 -->
-    <el-card>
-      <el-row :gutter="20">
-        <el-col :span="8">
-          <!-- 输入框 -->
-          <el-input placeholder="请输入内容" v-model="queryInfo.query" clearable @clear="search">
-            <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
-          </el-input>
-        </el-col>
-        <el-col :span="4">
-          <el-button type="primary" @click="dialogVisible=true">添加用户</el-button>
-        </el-col>
-      </el-row>
-      <!-- 表格 -->
-      <el-table :data="userList" border stripe>
-        <el-table-column type="index" label="#"></el-table-column>
-        <el-table-column prop="username" label="姓名"></el-table-column>
-        <el-table-column prop="email" label="邮箱"></el-table-column>
-        <el-table-column prop="mobile" label="电话"></el-table-column>
-        <el-table-column prop="role_name" label="角色"></el-table-column>
-        <el-table-column label="状态">
-          <!-- 切换开关 -->
-          <template v-slot="scope">
-            <!-- 定义作用域插槽接收数据再传值（作用域插槽覆盖prop ） -->
-            <el-switch v-model="scope.row.mg_state" @change="userStadeChanged(scope.row)"></el-switch>
-          </template>
-        </el-table-column>
-        <el-table-column prop="address" label="操作" width="180px">
-          <template v-slot="scope">
-            <el-button
-              type="primary"
-              icon="el-icon-edit"
-              size="mini"
-              @click="showEditDialog(scope.row.id)"
-            ></el-button>
-            <el-button
-              type="danger"
-              icon="el-icon-delete"
-              size="mini"
-              @click="deletUserById(scope.row.id)"
-            ></el-button>
-            <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
-              <el-button type="warning" icon="el-icon-setting" size="mini"></el-button>
-            </el-tooltip>
-          </template>
-        </el-table-column>
-      </el-table>
-      <!-- 分页 -->
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="queryInfo.pagenum"
-        :page-sizes="[1, 5, 10, 15]"
-        :page-size="queryInfo.pagesize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-      ></el-pagination>
-    </el-card>
+    <wrap :title="['用户管理', '用户列表']">
+      <!-- 卡片区域 -->
+      <div slot="card">
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <!-- 输入框 -->
+            <el-input placeholder="请输入内容" v-model="queryInfo.query" clearable @clear="search">
+              <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+            </el-input>
+          </el-col>
+          <el-col :span="4">
+            <el-button type="primary" @click="dialogVisible=true">添加用户</el-button>
+          </el-col>
+        </el-row>
+        <!-- 表格 -->
+        <el-table :data="userList" border stripe>
+          <el-table-column type="index" label="#"></el-table-column>
+          <el-table-column prop="username" label="姓名"></el-table-column>
+          <el-table-column prop="email" label="邮箱"></el-table-column>
+          <el-table-column prop="mobile" label="电话"></el-table-column>
+          <el-table-column prop="role_name" label="角色"></el-table-column>
+          <el-table-column label="状态">
+            <!-- 切换开关 -->
+            <template v-slot="scope">
+              <!-- 定义作用域插槽接收数据再传值（作用域插槽覆盖prop ） -->
+              <el-switch v-model="scope.row.mg_state" @change="userStadeChanged(scope.row)"></el-switch>
+            </template>
+          </el-table-column>
+          <el-table-column prop="address" label="操作" width="180px">
+            <template v-slot="scope">
+              <el-button
+                type="primary"
+                icon="el-icon-edit"
+                size="mini"
+                @click="showEditDialog(scope.row.id)"
+              ></el-button>
+              <el-button
+                type="danger"
+                icon="el-icon-delete"
+                size="mini"
+                @click="deletUserById(scope.row.id)"
+              ></el-button>
+              <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
+                <el-button
+                  type="warning"
+                  icon="el-icon-setting"
+                  size="mini"
+                  @click="setRole(scope.row)"
+                ></el-button>
+              </el-tooltip>
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- 分页 -->
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="queryInfo.pagenum"
+          :page-sizes="[1, 5, 10, 15]"
+          :page-size="queryInfo.pagesize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+        ></el-pagination>
+      </div>
+    </wrap>
+
     <!-- 添加用户对话框 -->
     <el-dialog title="添加用户" @close="addDialogClose" :visible.sync="dialogVisible" width="50%">
       <!-- 嵌套表单 -->
@@ -105,10 +107,33 @@
         <el-button type="primary" @click="editUserInfo">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 分配角色对话框 -->
+    <el-dialog title="分配角色" :visible.sync="setRolesdialogVisible" width="50%">
+      <div>
+        <p>当前的用户：{{userInfo.username}}</p>
+        <p>当前的角色：{{userInfo.role_name}}</p>
+        <p>
+          分配新角色：
+          <el-select v-model="selectedRoleId" placeholder="请选择">
+            <el-option
+              v-for="item in rolesList"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </p>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="setRolesdialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveRolesInfo">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import Wrap from "../../components/Wrap";
 export default {
   data() {
     // 自定义手机号规则(规则-正则表达式，value，回调函数)
@@ -127,13 +152,14 @@ export default {
         // 当前页数
         pagenum: 1,
         // 当前页显示几条数据
-        pagesize: 2
+        pagesize: 5
       },
       userList: [],
       total: 0,
       //控制对话框的显示/隐藏
       dialogVisible: false,
       editdialogVisible: false,
+      setRolesdialogVisible: false,
       // 添加用户表单参数
       addForm: {
         username: "",
@@ -166,8 +192,16 @@ export default {
           { validator: checkMobil, trigger: "blur" }
         ]
       },
-      formLabelWidth: "70px"
+      formLabelWidth: "70px",
+      // 分配角色信息
+      userInfo: {},
+      rolesList: [],
+      // 记录分配角色设置的slect选中的值
+      selectedRoleId: ""
     };
+  },
+  components: {
+    Wrap
   },
   created() {
     this.getUsedrs();
@@ -214,11 +248,13 @@ export default {
     // 表单提交预校验
     addUser() {
       this.$refs.addFrom.validate(async valid => {
-        if (!valid) return;
+        if (!valid) return this.$message.error("请完善信息！");
         // 发起添加用户请求
         const { data: res } = await this.$http.post("users", this.addForm);
+        console.log(res);
+
         if (res.meta.status !== 201) return this.$message.error(res.meta.msg);
-        this.$message.success("添加用户成功");
+        this.$message.success(res.meta.msg);
         // 隐藏对话框
         this.dialogVisible = false;
         // 重新获取用户数据
@@ -250,11 +286,12 @@ export default {
         if (res.meta.status !== 200) {
           return this.$message.error(res.meta.msg);
         }
+        this.$message.success(res.meta.msg);
         this.editdialogVisible = false;
         this.getUsedrs();
-        this.$message.success(res.meta.msg);
       });
     },
+    // 删除用户
     async deletUserById(id) {
       // this.$confrim 的返回值是个promise
       const confrimResult = await this.$confrim(
@@ -275,20 +312,37 @@ export default {
       const { data: res } = await this.$http.delete("users/" + id);
       if (res.meta.status !== 200) return this.$message.error(res.meta.msg);
       this.getUsedrs();
+    },
+    // 分配角色
+    async setRole(userInfo) {
+      this.userInfo = userInfo;
+      // 获取分配新角色列表
+      const { data: res } = await this.$http.get("roles");
+      if (res.meta.status !== 200) return this.$message.error(res.meta.msg);
+      this.rolesList = res.data;
+      this.setRolesdialogVisible = true;
+    },
+    //提交角色分配修改
+    async saveRolesInfo() {
+      if (!this.selectedRoleId) {
+        return this.$message.warning("请选择需要的分配新角色");
+      }
+      const { data: res } = await this.$http.put(
+        `users/${this.userInfo.id}/role`,
+        {
+          rid: this.selectedRoleId
+        }
+      );
+      if (res.meta.status !== 200) return this.$message.error(res.meta.msg);
+      this.$message.success(res.meta.msg)
+      this.setRolesdialogVisible = false;
+      this.getUsedrs();
     }
   }
 };
 </script>
 
 <style>
-.el-breadcrumb {
-  margin-bottom: 15px;
-  font-size: 12px;
-}
-.el-card {
-  margin-top: 15px;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15) !important;
-}
 .el-table {
   margin: 15px 0;
   font-size: 12px;

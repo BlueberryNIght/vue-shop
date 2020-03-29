@@ -26,7 +26,9 @@ import {
     Select,
     Option,
     // 不需要挂载
-    MessageBox
+    MessageBox,
+    Tag,
+    Tree
 } from 'element-ui'
 // 消息提示弹框
 // import {message} from "element-ui"
@@ -54,6 +56,8 @@ Vue.use(Pagination)
 Vue.use(Dialog)
 Vue.use(Select)
 Vue.use(Option)
+Vue.use(Tag)
+Vue.use(Tree)
 
 Vue.prototype.$message = Message
 Vue.prototype.$confrim = MessageBox.confirm
