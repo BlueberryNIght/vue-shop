@@ -251,8 +251,6 @@ export default {
         if (!valid) return this.$message.error("请完善信息！");
         // 发起添加用户请求
         const { data: res } = await this.$http.post("users", this.addForm);
-        console.log(res);
-
         if (res.meta.status !== 201) return this.$message.error(res.meta.msg);
         this.$message.success(res.meta.msg);
         // 隐藏对话框
@@ -334,7 +332,7 @@ export default {
         }
       );
       if (res.meta.status !== 200) return this.$message.error(res.meta.msg);
-      this.$message.success(res.meta.msg)
+      this.$message.success(res.meta.msg);
       this.setRolesdialogVisible = false;
       this.getUsedrs();
     }
