@@ -29,7 +29,10 @@ import {
     MessageBox,
     Tag,
     Tree,
-    Cascader
+    Cascader,
+    Alert,
+    Tabs,
+    TabPane
 } from 'element-ui'
 // 消息提示弹框
 // import {message} from "element-ui"
@@ -60,5 +63,8 @@ Vue.use(Option)
 Vue.use(Tag)
 Vue.use(Tree)
 Vue.use(Cascader)
+Vue.use(Alert)
+Vue.use(Tabs)
+Vue.use(TabPane)
 Vue.prototype.$message = Message
 Vue.prototype.$confrim = MessageBox.confirm
