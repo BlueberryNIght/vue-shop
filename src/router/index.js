@@ -43,6 +43,14 @@ const routes = [
       {
         path: '/params',
         component: () => import('views/goods/Params')
+      },
+      {
+        path: '/goods',
+        component: () => import('views/goods/List')
+      },
+      {
+        path: '/goods/add',
+        component: () => import('views/goods/Add')
       }
     ]
   }
@@ -57,10 +65,10 @@ router.beforeEach((to, from, next) => {
   // to 将要跳转到哪个页面
   // from 从哪个页面跳转来
   // next()执行下一步（放行）
-  if(to.path === '/login') return next();
+  if (to.path === '/login') return next();
   const tokenStr = window.sessionStorage.getItem('token');
   // 判断是否有token 没有就强制到登录界面
-  if(!tokenStr) return next('/login');
+  if (!tokenStr) return next('/login');
   next()
 })
 export default router
