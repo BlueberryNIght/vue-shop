@@ -50,7 +50,7 @@
 
 <script>
 import Wrap from "components/Wrap";
-import { formatDate } from "@/common/utils";
+import { formatDate } from "../../common/utils";
 export default {
   components: {
     Wrap
